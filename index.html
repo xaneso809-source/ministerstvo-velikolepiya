@@ -7,24 +7,35 @@
 <style>
 *{box-sizing:border-box}
 :root{
-  --bg:#0d1712;--card:rgba(255,255,255,.08);--card2:rgba(255,255,255,.12);
-  --gold:#f2c86b;--green:#77b978;--mint:#d8f5d0;--text:#f7f1df;--muted:#c7c1ae;
-  --danger:#ff6b6b;--line:rgba(255,255,255,.16);
+  --bg:#0d1712;
+  --gold:#f2c86b;
+  --gold2:#fff0bd;
+  --green:#31572c;
+  --text:#f7f1df;
+  --muted:#c7c1ae;
+  --line:rgba(255,255,255,.16);
 }
 html{scroll-behavior:smooth}
 body{
-  margin:0;min-height:100vh;padding:18px;
+  margin:0;
+  min-height:100vh;
+  padding:18px;
   font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
   color:var(--text);
   background:
     radial-gradient(circle at 15% 8%,rgba(242,200,107,.24),transparent 28%),
     radial-gradient(circle at 88% 12%,rgba(119,185,120,.22),transparent 30%),
-    radial-gradient(circle at 50% 95%,rgba(85,120,255,.11),transparent 35%),
     linear-gradient(135deg,#07100c,#15251d 55%,#0a130f);
-  display:flex;align-items:center;justify-content:center;
+  display:flex;
+  align-items:center;
+  justify-content:center;
 }
 body:before{
-  content:"";position:fixed;inset:0;pointer-events:none;opacity:.22;
+  content:"";
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  opacity:.18;
   background-image:
     linear-gradient(rgba(255,255,255,.05) 1px,transparent 1px),
     linear-gradient(90deg,rgba(255,255,255,.05) 1px,transparent 1px);
@@ -33,151 +44,450 @@ body:before{
 }
 .screen{width:100%;max-width:920px}
 .card{
-  position:relative;overflow:hidden;
+  position:relative;
+  overflow:hidden;
   background:linear-gradient(145deg,rgba(255,255,255,.13),rgba(255,255,255,.055));
   border:1px solid var(--line);
-  border-radius:34px;padding:30px;
+  border-radius:34px;
+  padding:30px;
   box-shadow:0 30px 90px rgba(0,0,0,.34), inset 0 1px 0 rgba(255,255,255,.16);
   backdrop-filter:blur(18px);
   text-align:center;
 }
-.card:after{
-  content:"";position:absolute;inset:-2px;pointer-events:none;
-  background:linear-gradient(120deg,transparent 10%,rgba(255,255,255,.13),transparent 35%);
-  transform:translateX(-80%);animation:sheen 5s ease-in-out infinite;
-}
-@keyframes sheen{0%,45%{transform:translateX(-90%)}75%,100%{transform:translateX(90%)}}
 .hidden{display:none!important}
 .kicker{
-  display:inline-flex;gap:8px;align-items:center;margin-bottom:16px;
+  display:inline-flex;
+  gap:8px;
+  align-items:center;
+  margin-bottom:16px;
   border:1px solid rgba(242,200,107,.35);
-  background:rgba(242,200,107,.10);color:var(--gold);
-  border-radius:999px;padding:9px 13px;font-size:13px;font-weight:850;letter-spacing:.04em;text-transform:uppercase;
+  background:rgba(242,200,107,.10);
+  color:var(--gold);
+  border-radius:999px;
+  padding:9px 13px;
+  font-size:13px;
+  font-weight:850;
+  letter-spacing:.04em;
+  text-transform:uppercase;
 }
-h1{margin:0 0 12px;font-size:clamp(38px,8vw,72px);line-height:.92;letter-spacing:-.07em}
-h2{margin:0 0 14px;font-size:clamp(26px,5vw,44px);line-height:1;letter-spacing:-.055em}
+h1{
+  margin:0 0 12px;
+  font-size:clamp(38px,8vw,72px);
+  line-height:.92;
+  letter-spacing:-.07em;
+}
+h2{
+  margin:0 0 14px;
+  font-size:clamp(26px,5vw,44px);
+  line-height:1;
+  letter-spacing:-.055em;
+}
 h3{font-size:24px;margin:24px 0 12px;color:var(--gold)}
 p{font-size:18px;line-height:1.52;color:var(--muted)}
 b{color:#fff}
 .btn{
-  position:relative;z-index:2;
-  display:inline-flex;align-items:center;justify-content:center;gap:8px;
-  min-height:54px;padding:16px 24px;border:0;border-radius:18px;
-  color:#15110a;background:linear-gradient(135deg,#ffe29a,#f2c86b 55%,#d8a93e);
-  font-size:18px;font-weight:950;text-decoration:none;cursor:pointer;
+  position:relative;
+  z-index:2;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  min-height:54px;
+  padding:16px 24px;
+  border:0;
+  border-radius:18px;
+  color:#15110a;
+  background:linear-gradient(135deg,#ffe29a,#f2c86b 55%,#d8a93e);
+  font-size:18px;
+  font-weight:950;
+  text-decoration:none;
+  cursor:pointer;
   box-shadow:0 18px 38px rgba(242,200,107,.22), inset 0 1px 0 rgba(255,255,255,.55);
 }
-.btn.secondary{background:rgba(255,255,255,.10);color:var(--text);border:1px solid var(--line);box-shadow:none}
 .btn:active{transform:translateY(1px)}
+.btn:disabled{opacity:.55;cursor:default}
 .small{font-size:13px;color:rgba(247,241,223,.62)}
-.timer{
-  display:flex;gap:10px;justify-content:center;margin:20px 0 10px
-}
+.timer{display:flex;gap:10px;justify-content:center;margin:20px 0 10px}
 .timer div{
-  min-width:72px;background:rgba(255,255,255,.08);border:1px solid var(--line);
-  border-radius:18px;padding:12px 10px
+  min-width:72px;
+  background:rgba(255,255,255,.08);
+  border:1px solid var(--line);
+  border-radius:18px;
+  padding:12px 10px;
 }
 .timer strong{display:block;font-size:24px;color:var(--gold)}
-.wheel-area{position:relative;width:min(86vw,430px);height:min(86vw,430px);margin:20px auto}
+
+/* WHEEL */
+.wheel-area{
+  position:relative;
+  width:min(86vw,450px);
+  height:min(86vw,450px);
+  margin:24px auto 14px;
+}
 .pointer{
-  position:absolute;left:50%;top:-9px;transform:translateX(-50%);z-index:5;
-  width:0;height:0;border-left:22px solid transparent;border-right:22px solid transparent;
-  border-top:42px solid var(--gold);filter:drop-shadow(0 7px 5px rgba(0,0,0,.45));
+  position:absolute;
+  left:50%;
+  top:-8px;
+  transform:translateX(-50%);
+  z-index:10;
+  width:0;
+  height:0;
+  border-left:22px solid transparent;
+  border-right:22px solid transparent;
+  border-top:44px solid #fff8e0;
+  filter:drop-shadow(0 7px 5px rgba(0,0,0,.50));
 }
 .wheel{
-  width:100%;height:100%;border-radius:50%;
-  border:12px solid rgba(255,255,255,.88);
-  box-shadow:0 24px 60px rgba(0,0,0,.38),0 0 0 1px rgba(242,200,107,.25),0 0 50px rgba(242,200,107,.10);
+  width:100%;
+  height:100%;
+  border-radius:50%;
+  border:13px solid rgba(255,255,255,.92);
+  box-shadow:
+    0 28px 70px rgba(0,0,0,.42),
+    0 0 0 1px rgba(242,200,107,.30),
+    0 0 60px rgba(242,200,107,.12),
+    inset 0 0 0 2px rgba(255,255,255,.12);
   background:conic-gradient(
-    #f2c86b 0deg 27.69deg,#5eb1bf 27.69deg 55.38deg,#e07a5f 55.38deg 83.07deg,
-    #81b29a 83.07deg 110.76deg,#f4a261 110.76deg 138.45deg,#9d4edd 138.45deg 166.14deg,
-    #6a994e 166.14deg 193.83deg,#457b9d 193.83deg 221.52deg,#bc6c25 221.52deg 249.21deg,
-    #b56576 249.21deg 276.90deg,#2a9d8f 276.90deg 304.59deg,#8ecae6 304.59deg 332.28deg,
-    #ffd166 332.28deg 360deg
+    var(--gold) 0deg 30deg,
+    var(--green) 30deg 60deg,
+    var(--gold2) 60deg 90deg,
+    var(--gold) 90deg 120deg,
+    var(--green) 120deg 150deg,
+    var(--gold2) 150deg 180deg,
+    var(--gold) 180deg 210deg,
+    var(--green) 210deg 240deg,
+    var(--gold2) 240deg 270deg,
+    var(--gold) 270deg 300deg,
+    var(--green) 300deg 330deg,
+    var(--gold2) 330deg 360deg
   );
-  position:relative;transition:transform 4.7s cubic-bezier(.12,.72,.16,1);
+  position:relative;
+  overflow:hidden;
+  transition:transform 4.8s cubic-bezier(.12,.72,.16,1);
 }
-.wheel.spin{transform:rotate(2520deg)}
+.wheel.spin{transform:rotate(2550deg)}
+.wheel:after{
+  content:"";
+  position:absolute;
+  inset:0;
+  border-radius:50%;
+  background:
+    radial-gradient(circle at center, transparent 0 22%, rgba(0,0,0,.16) 22.5%, transparent 23.5%),
+    radial-gradient(circle at 36% 28%, rgba(255,255,255,.22), transparent 22%);
+  pointer-events:none;
+}
 .center{
-  position:absolute;inset:36%;border-radius:50%;background:linear-gradient(135deg,#fff,#ffe7a6);
-  color:#1d201b;z-index:3;display:grid;place-items:center;
-  font-size:36px;font-weight:950;box-shadow:0 10px 28px rgba(0,0,0,.35);
+  position:absolute;
+  inset:35.5%;
+  border-radius:50%;
+  background:linear-gradient(135deg,#fff,#ffe7a6);
+  color:#1d201b;
+  z-index:6;
+  display:grid;
+  place-items:center;
+  font-size:38px;
+  font-weight:950;
+  box-shadow:0 12px 30px rgba(0,0,0,.38), inset 0 1px 0 rgba(255,255,255,.75);
 }
 .slice-label{
-  position:absolute;left:50%;top:50%;width:47%;height:24px;transform-origin:0 50%;
-  font-size:11px;font-weight:950;color:#161616;text-align:right;padding-right:8px;line-height:1.05;
+  position:absolute;
+  left:50%;
+  top:50%;
+  width:0;
+  height:0;
+  transform-origin:0 0;
+  z-index:5;
 }
-.slice-label span{display:inline-block;max-width:105px;transform:rotate(90deg);background:rgba(255,255,255,.72);border-radius:9px;padding:3px 5px}
-.prize-list{display:grid;grid-template-columns:repeat(2,1fr);gap:9px;margin:16px auto 0;max-width:720px;text-align:left}
-.prize{
-  background:rgba(255,255,255,.08);border:1px solid var(--line);border-radius:16px;padding:11px 12px;
-  font-size:14px;color:var(--text)
+.slice-label span{
+  position:absolute;
+  left:112px;
+  top:-52px;
+  width:46px;
+  height:104px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  writing-mode:vertical-rl;
+  text-orientation:mixed;
+  font-size:13px;
+  font-weight:1000;
+  line-height:1;
+  letter-spacing:.03em;
+  text-transform:uppercase;
+  color:#fff;
+  text-shadow:0 2px 5px rgba(0,0,0,.55);
 }
+.slice-label.light span{
+  color:#1d201b;
+  text-shadow:0 1px 0 rgba(255,255,255,.4);
+}
+
 .result{
-  margin-top:20px;padding:20px;border-radius:24px;
+  margin-top:20px;
+  padding:20px;
+  border-radius:24px;
   background:linear-gradient(135deg,rgba(119,185,120,.20),rgba(242,200,107,.10));
-  border:1px solid rgba(242,200,107,.28)
+  border:1px solid rgba(242,200,107,.28);
 }
-.result-title{font-size:34px;font-weight:1000;letter-spacing:-.045em;color:var(--gold);margin-top:8px}
+.result-title{
+  font-size:34px;
+  font-weight:1000;
+  letter-spacing:-.045em;
+  color:var(--gold);
+  margin-top:8px;
+}
+
 .check{
-  text-align:left;max-width:680px;margin:20px auto;background:rgba(0,0,0,.18);
-  border:1px solid var(--line);border-radius:24px;padding:20px
+  text-align:left;
+  max-width:680px;
+  margin:20px auto;
+  background:rgba(0,0,0,.18);
+  border:1px solid var(--line);
+  border-radius:24px;
+  padding:20px;
 }
 .check-row{
-  display:flex;align-items:flex-start;justify-content:space-between;gap:12px;
-  padding:12px 0;border-bottom:1px solid rgba(255,255,255,.10);font-size:17px
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:12px;
+  padding:12px 0;
+  border-bottom:1px solid rgba(255,255,255,.10);
+  font-size:17px;
 }
 .check-row:last-child{border-bottom:0}
-.ok{color:var(--green);font-weight:900}.warn{color:var(--gold);font-weight:900}
+.ok{color:#77b978;font-weight:900}
+.warn{color:var(--gold);font-weight:900}
 .alert{
-  margin-top:18px;padding:16px;border-radius:18px;background:rgba(255,193,7,.10);
-  border:1px solid rgba(242,200,107,.30);color:#ffe3a0;line-height:1.5
+  margin-top:18px;
+  padding:16px;
+  border-radius:18px;
+  background:rgba(255,193,7,.10);
+  border:1px solid rgba(242,200,107,.30);
+  color:#ffe3a0;
+  line-height:1.5;
 }
+
 .certificate{
-  background:
-    linear-gradient(135deg,rgba(255,255,255,.96),rgba(255,248,225,.94));
-  color:#1e241f;border-radius:30px;padding:28px;
-  border:1px solid rgba(242,200,107,.45);box-shadow:inset 0 0 0 7px rgba(47,111,62,.08);
-  text-align:left;position:relative;overflow:hidden
+  background:linear-gradient(135deg,rgba(255,255,255,.96),rgba(255,248,225,.94));
+  color:#1e241f;
+  border-radius:30px;
+  padding:28px;
+  border:1px solid rgba(242,200,107,.45);
+  box-shadow:inset 0 0 0 7px rgba(47,111,62,.08);
+  text-align:left;
+  position:relative;
+  overflow:hidden;
 }
 .certificate:before{
-  content:"🌿";position:absolute;right:-20px;top:20px;font-size:170px;opacity:.08;transform:rotate(-12deg)
+  content:"🌿";
+  position:absolute;
+  right:-20px;
+  top:20px;
+  font-size:170px;
+  opacity:.08;
+  transform:rotate(-12deg);
 }
 .certificate h1,.certificate h2{text-align:center;color:#1e241f}
 .official{
-  background:#fff;border-left:7px solid #2f6f3e;border-radius:20px;padding:20px;
-  line-height:1.68;font-size:17px;box-shadow:0 10px 30px rgba(0,0,0,.06)
+  background:#fff;
+  border-left:7px solid #2f6f3e;
+  border-radius:20px;
+  padding:20px;
+  line-height:1.68;
+  font-size:17px;
+  box-shadow:0 10px 30px rgba(0,0,0,.06);
 }
 .official b{color:#1e241f}
-.stats{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin:18px 0}
+.stats{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:10px;
+  margin:18px 0;
+}
 .stat{
-  background:#f4f7ef;border:1px solid rgba(47,111,62,.13);border-radius:16px;padding:12px;
-  color:#243020
+  background:#f4f7ef;
+  border:1px solid rgba(47,111,62,.13);
+  border-radius:16px;
+  padding:12px;
+  color:#243020;
 }
 .stat b{color:#1e241f}
 .access{display:grid;gap:10px;margin:18px 0}
-.access div{background:#f4f7ef;border:1px solid rgba(47,111,62,.13);border-radius:16px;padding:12px;word-break:break-word;color:#243020}
+.access div{
+  background:#f4f7ef;
+  border:1px solid rgba(47,111,62,.13);
+  border-radius:16px;
+  padding:12px;
+  word-break:break-word;
+  color:#243020;
+}
 .access b{color:#1e241f}
 .stamp{
-  margin:20px auto;width:180px;height:180px;border:7px double #2f6f3e;border-radius:50%;
-  display:grid;place-items:center;transform:rotate(-10deg);color:#2f6f3e;font-weight:1000;
-  text-align:center;letter-spacing:.05em;background:rgba(47,111,62,.04)
+  margin:20px auto;
+  width:180px;
+  height:180px;
+  border:7px double #2f6f3e;
+  border-radius:50%;
+  display:grid;
+  place-items:center;
+  transform:rotate(-10deg);
+  color:#2f6f3e;
+  font-weight:1000;
+  text-align:center;
+  letter-spacing:.05em;
+  background:rgba(47,111,62,.04);
 }
 .signature{
-  text-align:center;margin:28px auto 10px;color:#1e241f;
-  background:rgba(47,111,62,.06);border-radius:20px;padding:18px;max-width:430px
+  text-align:center;
+  margin:28px auto 10px;
+  color:#1e241f;
+  background:rgba(47,111,62,.06);
+  border-radius:20px;
+  padding:18px;
+  max-width:430px;
 }
+
+.award-hero{
+  margin:22px 0;
+  padding:26px;
+  border-radius:28px;
+  background:
+    radial-gradient(circle at 18% 20%,rgba(242,200,107,.26),transparent 35%),
+    linear-gradient(135deg,#173321,#0d1b13);
+  border:1px solid rgba(242,200,107,.35);
+  color:#fff8df;
+  text-align:center;
+  position:relative;
+  overflow:hidden;
+  box-shadow:0 22px 55px rgba(0,0,0,.18);
+}
+.award-hero:before{
+  content:"";
+  position:absolute;
+  inset:12px;
+  border:1px solid rgba(242,200,107,.25);
+  border-radius:22px;
+  pointer-events:none;
+}
+.award-hero .award-kicker{
+  display:inline-flex;
+  padding:8px 12px;
+  border-radius:999px;
+  background:rgba(242,200,107,.12);
+  border:1px solid rgba(242,200,107,.35);
+  color:#f2c86b;
+  font-size:12px;
+  font-weight:900;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+}
+.award-hero .award-title{
+  margin:18px 0 6px;
+  font-size:clamp(34px,7vw,68px);
+  line-height:.9;
+  letter-spacing:-.07em;
+  font-weight:1000;
+}
+.award-hero .award-subtitle{
+  color:#e9dcc0;
+  font-size:18px;
+  margin:0 auto;
+  max-width:620px;
+}
+.ministry-header{
+  text-align:center;
+  padding:8px 0 4px;
+}
+.ministry-header .crest{
+  width:72px;
+  height:72px;
+  margin:0 auto 12px;
+  display:grid;
+  place-items:center;
+  border-radius:24px;
+  background:linear-gradient(135deg,#31572c,#f2c86b);
+  box-shadow:0 18px 36px rgba(49,87,44,.22);
+  font-size:36px;
+}
+.ministry-header h1{
+  margin-bottom:8px;
+}
+.decree-number{
+  display:inline-flex;
+  gap:8px;
+  align-items:center;
+  justify-content:center;
+  margin:0 auto 10px;
+  padding:9px 14px;
+  border-radius:999px;
+  background:#f4f7ef;
+  border:1px solid rgba(47,111,62,.14);
+  color:#31572c;
+  font-weight:900;
+  letter-spacing:.04em;
+  text-transform:uppercase;
+  font-size:13px;
+}
+.gold-divider{
+  height:1px;
+  background:linear-gradient(90deg,transparent,#d8a93e,transparent);
+  margin:22px 0;
+}
+.access-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+  margin:18px 0;
+}
+.access-tile{
+  background:linear-gradient(135deg,#f7faef,#fff);
+  border:1px solid rgba(47,111,62,.14);
+  border-radius:18px;
+  padding:16px;
+  color:#243020;
+  box-shadow:0 10px 28px rgba(47,87,44,.07);
+}
+.access-tile .tile-label{
+  font-size:12px;
+  color:#6b765f;
+  text-transform:uppercase;
+  letter-spacing:.08em;
+  font-weight:900;
+  margin-bottom:8px;
+}
+.access-tile .tile-value{
+  font-weight:900;
+  word-break:break-word;
+}
+.big-cta{
+  width:100%;
+  max-width:420px;
+  margin:8px auto 0;
+}
+
 @media(max-width:700px){
-  body{padding:10px}.card{padding:20px;border-radius:26px}
-  .prize-list,.stats{grid-template-columns:1fr}
-  .slice-label{font-size:9px}.slice-label span{max-width:82px}
+  body{padding:10px}
+  .card{padding:20px;border-radius:26px}
+  .stats{grid-template-columns:1fr}
+  .wheel-area{width:min(92vw,390px);height:min(92vw,390px)}
+  .slice-label span{
+    left:92px;
+    top:-45px;
+    height:90px;
+    width:38px;
+    font-size:10.5px;
+  }
   .certificate{padding:20px;border-radius:24px}
+  .access-grid{grid-template-columns:1fr}
+  .award-hero{padding:22px}
 }
 </style>
 </head>
 <body>
 
 <main class="screen">
+
 <section class="card" id="s1">
   <div class="kicker">Эксклюзивное предложение</div>
   <h1>🎁 Поздравляем!</h1>
@@ -187,43 +497,36 @@ b{color:#fff}
     <div><strong>03</strong><span class="small">минуты</span></div>
     <div><strong>16</strong><span class="small">секунд</span></div>
   </div>
-  <button class="btn" id="spinBtn" type="button">КРУТИТЬ КОЛЕСО</button>
+  <button class="btn" id="startBtn" type="button">КРУТИТЬ КОЛЕСО</button>
   <p class="small">Осталось призов: 1 · Участие бесплатное · Отказ невозможен</p>
 </section>
 
 <section class="card hidden" id="s2">
   <div class="kicker">Колесо удачи</div>
-  <h2>Ваш приз уже почти определён</h2>
+  <h2>Испытайте свою удачу</h2>
+  <p>Следите за стрелкой. У вас есть шанс получить крутой бонус.</p>
 
   <div class="wheel-area">
     <div class="pointer"></div>
     <div class="wheel" id="wheel">
       <div class="center">🎁</div>
-      <div class="slice-label" style="transform:rotate(13deg)"><span>🩲 1 шт.</span></div>
-      <div class="slice-label" style="transform:rotate(41deg)"><span>🩲 неделя</span></div>
-      <div class="slice-label" style="transform:rotate(69deg)"><span>🩲 месяц</span></div>
-      <div class="slice-label" style="transform:rotate(97deg)"><span>🩲 год</span></div>
-      <div class="slice-label" style="transform:rotate(125deg)"><span>💨 табак</span></div>
-      <div class="slice-label" style="transform:rotate(153deg)"><span>💨 табак год</span></div>
-      <div class="slice-label" style="transform:rotate(181deg)"><span>🏔️ горы</span></div>
-      <div class="slice-label" style="transform:rotate(209deg)"><span>⛰️ Кавказ</span></div>
-      <div class="slice-label" style="transform:rotate(237deg)"><span>🌲 домик</span></div>
-      <div class="slice-label" style="transform:rotate(265deg)"><span>🧪 смола</span></div>
-      <div class="slice-label" style="transform:rotate(293deg)"><span>💋 поцелуи</span></div>
-      <div class="slice-label" style="transform:rotate(321deg)"><span>🐈 кот</span></div>
-      <div class="slice-label" style="transform:rotate(349deg)"><span>🏆 секрет</span></div>
+
+      <div class="slice-label light" style="transform:rotate(15deg)"><span>🩲 1 шт.</span></div>
+      <div class="slice-label" style="transform:rotate(45deg)"><span>🩲 неделя</span></div>
+      <div class="slice-label light" style="transform:rotate(75deg)"><span>🩲 месяц</span></div>
+      <div class="slice-label light" style="transform:rotate(105deg)"><span>🩲 год</span></div>
+      <div class="slice-label" style="transform:rotate(135deg)"><span>💨 табак</span></div>
+      <div class="slice-label light" style="transform:rotate(165deg)"><span>💨 табак+</span></div>
+      <div class="slice-label light" style="transform:rotate(195deg)"><span>🏔️ горы</span></div>
+      <div class="slice-label" style="transform:rotate(225deg)"><span>⛰️ кавказ</span></div>
+      <div class="slice-label light" style="transform:rotate(255deg)"><span>🌲 домик</span></div>
+      <div class="slice-label light" style="transform:rotate(285deg)"><span>🧪 смола</span></div>
+      <div class="slice-label" style="transform:rotate(315deg)"><span>💋 поцелуи</span></div>
+      <div class="slice-label light" style="transform:rotate(345deg)"><span>🏆 секрет</span></div>
     </div>
   </div>
 
-  <div class="prize-list">
-    <div class="prize">🩲 Труханы — 1 штука</div><div class="prize">🩲 Запас труханов на неделю</div>
-    <div class="prize">🩲 Запас труханов на месяц</div><div class="prize">🩲 Запас труханов на год</div>
-    <div class="prize">💨 Запас табака для кальяна на месяц</div><div class="prize">💨 Запас табака для кальяна на год</div>
-    <div class="prize">🏔️ Поездка в горы на выходные</div><div class="prize">⛰️ Путешествие на Кавказ</div>
-    <div class="prize">🌲 Домик в горах на 3 дня</div><div class="prize">🧪 50 литров эпоксидной смолы</div>
-    <div class="prize">💋 Пять поцелуев жены</div><div class="prize">🐈 Право погладить кота вне очереди</div>
-    <div class="prize">🏆 Секретный приз</div>
-  </div>
+  <button class="btn" id="spinBtn" type="button">Крутить скорее</button>
 
   <div class="result hidden" id="result">
     <div>🎉 Поздравляем! Вы выиграли:</div>
@@ -249,8 +552,17 @@ b{color:#fff}
 
 <section class="card hidden" id="s4">
   <div class="certificate">
-    <h1>🏛 Министерство ландшафтного великолепия</h1>
-    <h2>Приказ №16</h2>
+    <div class="ministry-header">
+      <div class="crest">🌿</div>
+      <h1>Министерство ландшафтного великолепия</h1>
+      <div class="decree-number">🏛 Приказ №16</div>
+    </div>
+
+    <div class="award-hero">
+      <div class="award-kicker">Государственная награда</div>
+      <div class="award-title">ВЕЛИКОЛЕПНЫЙ+</div>
+      <p class="award-subtitle">Почётное звание присвоено. Обучение оплачено. Лицензия на великолепие продлена.</p>
+    </div>
 
     <div class="stamp">ВЕЛИКОЛЕПНО<br>ОДОБРЕНО ✅</div>
 
@@ -263,6 +575,8 @@ b{color:#fff}
       <b>2.</b> Направить его на повышение квалификации по программе <b>«Ландшафтный дизайн»</b>.<br>
       <b>3.</b> Оплатить обучение за счёт средств Министерства ландшафтного великолепия.
     </div>
+
+    <div class="gold-divider"></div>
 
     <h3>📊 Отчёт Межведомственной комиссии</h3>
     <div class="stats">
@@ -289,18 +603,46 @@ b{color:#fff}
       ✅ Сказать: «Спасибо, любимая, подарок огонь»
     </div>
 
-    <div class="access">
-      <div><b>Сайт курса:</b> https://netology.ru</div>
-      <div><b>Логин:</b> xane.so809@gmail.com</div>
-      <div><b>Пароль:</b> пароль</div>
+    <div class="official" style="margin-top:18px;border-left-color:#f2c86b;">
+      <b>Личное обращение министра:</b><br><br>
+      Любимый, с днём рождения ❤️
+      <br><br>
+      Я очень в тебя верю. В твои руки, в твои идеи, в твоё чувство красоты и в то, что ты можешь делать по-настоящему классные вещи.
+      Мне нравится видеть, как у тебя горят глаза.
+      <br><br>
+      Я хочу, чтобы у тебя было больше пространства для того, что тебе правда интересно.
+      Поэтому этот курс — не просто подарок, а мой способ сказать: я рядом, я поддерживаю тебя и очень хочу, чтобы ты попробовал то, к чему тебя тянет.
+      <br><br>
+      Пусть это станет началом чего-то классного. Я тобой горжусь и люблю тебя очень.
+    </div>
+
+    <div class="gold-divider"></div>
+
+    <div class="access-grid">
+      <div class="access-tile">
+        <div class="tile-label">Сайт курса</div>
+        <div class="tile-value">https://netology.ru</div>
+      </div>
+      <div class="access-tile">
+        <div class="tile-label">Логин</div>
+        <div class="tile-value">xane.so809@gmail.com</div>
+      </div>
+      <div class="access-tile">
+        <div class="tile-label">Пароль</div>
+        <div class="tile-value">пароль</div>
+      </div>
+      <div class="access-tile">
+        <div class="tile-label">Статус доступа</div>
+        <div class="tile-value">Открыт после поцелуя ✅</div>
+      </div>
     </div>
 
     <div style="text-align:center">
-      <a class="btn" href="https://netology.ru" target="_blank">Получить доступ к обучению</a>
+      <a class="btn big-cta" href="https://netology.ru" target="_blank">Получить доступ к обучению</a>
     </div>
 
     <div class="signature">
-      С уважением,<br><br>
+      С уважением и высшей степенью одобрения,<br><br>
       <b>Министр ландшафтного великолепия</b><br>
       Ксения Чуксина<br><br>
       М.П.<br>
@@ -313,21 +655,42 @@ b{color:#fff}
     </p>
   </div>
 </section>
+
 </main>
 
 <script>
-const s1=document.getElementById("s1"),s2=document.getElementById("s2"),s3=document.getElementById("s3"),s4=document.getElementById("s4");
-const wheel=document.getElementById("wheel"),result=document.getElementById("result");
+const s1=document.getElementById("s1");
+const s2=document.getElementById("s2");
+const s3=document.getElementById("s3");
+const s4=document.getElementById("s4");
+const wheel=document.getElementById("wheel");
+const result=document.getElementById("result");
+
+document.getElementById("startBtn").addEventListener("click",()=>{
+  s1.classList.add("hidden");
+  s2.classList.remove("hidden");
+  window.scrollTo({top:0,behavior:"smooth"});
+});
+
 document.getElementById("spinBtn").addEventListener("click",()=>{
-  s1.classList.add("hidden");s2.classList.remove("hidden");
-  setTimeout(()=>wheel.classList.add("spin"),160);
-  setTimeout(()=>{result.classList.remove("hidden");result.scrollIntoView({behavior:"smooth",block:"center"});},4850);
+  document.getElementById("spinBtn").disabled=true;
+  setTimeout(()=>wheel.classList.add("spin"),120);
+  setTimeout(()=>{
+    result.classList.remove("hidden");
+    result.scrollIntoView({behavior:"smooth",block:"center"});
+  },4850);
 });
+
 document.getElementById("detailsBtn").addEventListener("click",()=>{
-  s2.classList.add("hidden");s3.classList.remove("hidden");window.scrollTo({top:0,behavior:"smooth"});
+  s2.classList.add("hidden");
+  s3.classList.remove("hidden");
+  window.scrollTo({top:0,behavior:"smooth"});
 });
+
 document.getElementById("decisionBtn").addEventListener("click",()=>{
-  s3.classList.add("hidden");s4.classList.remove("hidden");window.scrollTo({top:0,behavior:"smooth"});
+  s3.classList.add("hidden");
+  s4.classList.remove("hidden");
+  window.scrollTo({top:0,behavior:"smooth"});
 });
 </script>
 </body>
