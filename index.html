@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Секретный приз</title>
+<style>
+*{box-sizing:border-box}
+:root{
+  --bg:#0d1712;--card:rgba(255,255,255,.08);--card2:rgba(255,255,255,.12);
+  --gold:#f2c86b;--green:#77b978;--mint:#d8f5d0;--text:#f7f1df;--muted:#c7c1ae;
+  --danger:#ff6b6b;--line:rgba(255,255,255,.16);
+}
+html{scroll-behavior:smooth}
+body{
+  margin:0;min-height:100vh;padding:18px;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
+  color:var(--text);
+  background:
+    radial-gradient(circle at 15% 8%,rgba(242,200,107,.24),transparent 28%),
+    radial-gradient(circle at 88% 12%,rgba(119,185,120,.22),transparent 30%),
+    radial-gradient(circle at 50% 95%,rgba(85,120,255,.11),transparent 35%),
+    linear-gradient(135deg,#07100c,#15251d 55%,#0a130f);
+  display:flex;align-items:center;justify-content:center;
+}
+body:before{
+  content:"";position:fixed;inset:0;pointer-events:none;opacity:.22;
+  background-image:
+    linear-gradient(rgba(255,255,255,.05) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.05) 1px,transparent 1px);
+  background-size:46px 46px;
+  mask-image:radial-gradient(circle at center,black,transparent 75%);
+}
+.screen{width:100%;max-width:920px}
+.card{
+  position:relative;overflow:hidden;
+  background:linear-gradient(145deg,rgba(255,255,255,.13),rgba(255,255,255,.055));
+  border:1px solid var(--line);
+  border-radius:34px;padding:30px;
+  box-shadow:0 30px 90px rgba(0,0,0,.34), inset 0 1px 0 rgba(255,255,255,.16);
+  backdrop-filter:blur(18px);
+  text-align:center;
+}
+.card:after{
+  content:"";position:absolute;inset:-2px;pointer-events:none;
+  background:linear-gradient(120deg,transparent 10%,rgba(255,255,255,.13),transparent 35%);
+  transform:translateX(-80%);animation:sheen 5s ease-in-out infinite;
+}
+@keyframes sheen{0%,45%{transform:translateX(-90%)}75%,100%{transform:translateX(90%)}}
+.hidden{display:none!important}
+.kicker{
+  display:inline-flex;gap:8px;align-items:center;margin-bottom:16px;
+  border:1px solid rgba(242,200,107,.35);
+  background:rgba(242,200,107,.10);color:var(--gold);
+  border-radius:999px;padding:9px 13px;font-size:13px;font-weight:850;letter-spacing:.04em;text-transform:uppercase;
+}
+h1{margin:0 0 12px;font-size:clamp(38px,8vw,72px);line-height:.92;letter-spacing:-.07em}
+h2{margin:0 0 14px;font-size:clamp(26px,5vw,44px);line-height:1;letter-spacing:-.055em}
+h3{font-size:24px;margin:24px 0 12px;color:var(--gold)}
+p{font-size:18px;line-height:1.52;color:var(--muted)}
+b{color:#fff}
+.btn{
+  position:relative;z-index:2;
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  min-height:54px;padding:16px 24px;border:0;border-radius:18px;
+  color:#15110a;background:linear-gradient(135deg,#ffe29a,#f2c86b 55%,#d8a93e);
+  font-size:18px;font-weight:950;text-decoration:none;cursor:pointer;
+  box-shadow:0 18px 38px rgba(242,200,107,.22), inset 0 1px 0 rgba(255,255,255,.55);
+}
+.btn.secondary{background:rgba(255,255,255,.10);color:var(--text);border:1px solid var(--line);box-shadow:none}
+.btn:active{transform:translateY(1px)}
+.small{font-size:13px;color:rgba(247,241,223,.62)}
+.timer{
+  display:flex;gap:10px;justify-content:center;margin:20px 0 10px
+}
+.timer div{
+  min-width:72px;background:rgba(255,255,255,.08);border:1px solid var(--line);
+  border-radius:18px;padding:12px 10px
+}
+.timer strong{display:block;font-size:24px;color:var(--gold)}
+.wheel-area{position:relative;width:min(86vw,430px);height:min(86vw,430px);margin:20px auto}
+.pointer{
+  position:absolute;left:50%;top:-9px;transform:translateX(-50%);z-index:5;
+  width:0;height:0;border-left:22px solid transparent;border-right:22px solid transparent;
+  border-top:42px solid var(--gold);filter:drop-shadow(0 7px 5px rgba(0,0,0,.45));
+}
+.wheel{
+  width:100%;height:100%;border-radius:50%;
+  border:12px solid rgba(255,255,255,.88);
+  box-shadow:0 24px 60px rgba(0,0,0,.38),0 0 0 1px rgba(242,200,107,.25),0 0 50px rgba(242,200,107,.10);
+  background:conic-gradient(
+    #f2c86b 0deg 27.69deg,#5eb1bf 27.69deg 55.38deg,#e07a5f 55.38deg 83.07deg,
+    #81b29a 83.07deg 110.76deg,#f4a261 110.76deg 138.45deg,#9d4edd 138.45deg 166.14deg,
+    #6a994e 166.14deg 193.83deg,#457b9d 193.83deg 221.52deg,#bc6c25 221.52deg 249.21deg,
+    #b56576 249.21deg 276.90deg,#2a9d8f 276.90deg 304.59deg,#8ecae6 304.59deg 332.28deg,
+    #ffd166 332.28deg 360deg
+  );
+  position:relative;transition:transform 4.7s cubic-bezier(.12,.72,.16,1);
+}
+.wheel.spin{transform:rotate(2520deg)}
+.center{
+  position:absolute;inset:36%;border-radius:50%;background:linear-gradient(135deg,#fff,#ffe7a6);
+  color:#1d201b;z-index:3;display:grid;place-items:center;
+  font-size:36px;font-weight:950;box-shadow:0 10px 28px rgba(0,0,0,.35);
+}
+.slice-label{
+  position:absolute;left:50%;top:50%;width:47%;height:24px;transform-origin:0 50%;
+  font-size:11px;font-weight:950;color:#161616;text-align:right;padding-right:8px;line-height:1.05;
+}
+.slice-label span{display:inline-block;max-width:105px;transform:rotate(90deg);background:rgba(255,255,255,.72);border-radius:9px;padding:3px 5px}
+.prize-list{display:grid;grid-template-columns:repeat(2,1fr);gap:9px;margin:16px auto 0;max-width:720px;text-align:left}
+.prize{
+  background:rgba(255,255,255,.08);border:1px solid var(--line);border-radius:16px;padding:11px 12px;
+  font-size:14px;color:var(--text)
+}
+.result{
+  margin-top:20px;padding:20px;border-radius:24px;
+  background:linear-gradient(135deg,rgba(119,185,120,.20),rgba(242,200,107,.10));
+  border:1px solid rgba(242,200,107,.28)
+}
+.result-title{font-size:34px;font-weight:1000;letter-spacing:-.045em;color:var(--gold);margin-top:8px}
+.check{
+  text-align:left;max-width:680px;margin:20px auto;background:rgba(0,0,0,.18);
+  border:1px solid var(--line);border-radius:24px;padding:20px
+}
+.check-row{
+  display:flex;align-items:flex-start;justify-content:space-between;gap:12px;
+  padding:12px 0;border-bottom:1px solid rgba(255,255,255,.10);font-size:17px
+}
+.check-row:last-child{border-bottom:0}
+.ok{color:var(--green);font-weight:900}.warn{color:var(--gold);font-weight:900}
+.alert{
+  margin-top:18px;padding:16px;border-radius:18px;background:rgba(255,193,7,.10);
+  border:1px solid rgba(242,200,107,.30);color:#ffe3a0;line-height:1.5
+}
+.certificate{
+  background:
+    linear-gradient(135deg,rgba(255,255,255,.96),rgba(255,248,225,.94));
+  color:#1e241f;border-radius:30px;padding:28px;
+  border:1px solid rgba(242,200,107,.45);box-shadow:inset 0 0 0 7px rgba(47,111,62,.08);
+  text-align:left;position:relative;overflow:hidden
+}
+.certificate:before{
+  content:"🌿";position:absolute;right:-20px;top:20px;font-size:170px;opacity:.08;transform:rotate(-12deg)
+}
+.certificate h1,.certificate h2{text-align:center;color:#1e241f}
+.official{
+  background:#fff;border-left:7px solid #2f6f3e;border-radius:20px;padding:20px;
+  line-height:1.68;font-size:17px;box-shadow:0 10px 30px rgba(0,0,0,.06)
+}
+.official b{color:#1e241f}
+.stats{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin:18px 0}
+.stat{
+  background:#f4f7ef;border:1px solid rgba(47,111,62,.13);border-radius:16px;padding:12px;
+  color:#243020
+}
+.stat b{color:#1e241f}
+.access{display:grid;gap:10px;margin:18px 0}
+.access div{background:#f4f7ef;border:1px solid rgba(47,111,62,.13);border-radius:16px;padding:12px;word-break:break-word;color:#243020}
+.access b{color:#1e241f}
+.stamp{
+  margin:20px auto;width:180px;height:180px;border:7px double #2f6f3e;border-radius:50%;
+  display:grid;place-items:center;transform:rotate(-10deg);color:#2f6f3e;font-weight:1000;
+  text-align:center;letter-spacing:.05em;background:rgba(47,111,62,.04)
+}
+.signature{
+  text-align:center;margin:28px auto 10px;color:#1e241f;
+  background:rgba(47,111,62,.06);border-radius:20px;padding:18px;max-width:430px
+}
+@media(max-width:700px){
+  body{padding:10px}.card{padding:20px;border-radius:26px}
+  .prize-list,.stats{grid-template-columns:1fr}
+  .slice-label{font-size:9px}.slice-label span{max-width:82px}
+  .certificate{padding:20px;border-radius:24px}
+}
+</style>
+</head>
+<body>
+
+<main class="screen">
+<section class="card" id="s1">
+  <div class="kicker">Эксклюзивное предложение</div>
+  <h1>🎁 Поздравляем!</h1>
+  <p>Для вас доступна <b>1 бесплатная попытка</b> в праздничном розыгрыше.</p>
+  <div class="timer">
+    <div><strong>00</strong><span class="small">часов</span></div>
+    <div><strong>03</strong><span class="small">минуты</span></div>
+    <div><strong>16</strong><span class="small">секунд</span></div>
+  </div>
+  <button class="btn" id="spinBtn" type="button">КРУТИТЬ КОЛЕСО</button>
+  <p class="small">Осталось призов: 1 · Участие бесплатное · Отказ невозможен</p>
+</section>
+
+<section class="card hidden" id="s2">
+  <div class="kicker">Колесо удачи</div>
+  <h2>Ваш приз уже почти определён</h2>
+
+  <div class="wheel-area">
+    <div class="pointer"></div>
+    <div class="wheel" id="wheel">
+      <div class="center">🎁</div>
+      <div class="slice-label" style="transform:rotate(13deg)"><span>🩲 1 шт.</span></div>
+      <div class="slice-label" style="transform:rotate(41deg)"><span>🩲 неделя</span></div>
+      <div class="slice-label" style="transform:rotate(69deg)"><span>🩲 месяц</span></div>
+      <div class="slice-label" style="transform:rotate(97deg)"><span>🩲 год</span></div>
+      <div class="slice-label" style="transform:rotate(125deg)"><span>💨 табак</span></div>
+      <div class="slice-label" style="transform:rotate(153deg)"><span>💨 табак год</span></div>
+      <div class="slice-label" style="transform:rotate(181deg)"><span>🏔️ горы</span></div>
+      <div class="slice-label" style="transform:rotate(209deg)"><span>⛰️ Кавказ</span></div>
+      <div class="slice-label" style="transform:rotate(237deg)"><span>🌲 домик</span></div>
+      <div class="slice-label" style="transform:rotate(265deg)"><span>🧪 смола</span></div>
+      <div class="slice-label" style="transform:rotate(293deg)"><span>💋 поцелуи</span></div>
+      <div class="slice-label" style="transform:rotate(321deg)"><span>🐈 кот</span></div>
+      <div class="slice-label" style="transform:rotate(349deg)"><span>🏆 секрет</span></div>
+    </div>
+  </div>
+
+  <div class="prize-list">
+    <div class="prize">🩲 Труханы — 1 штука</div><div class="prize">🩲 Запас труханов на неделю</div>
+    <div class="prize">🩲 Запас труханов на месяц</div><div class="prize">🩲 Запас труханов на год</div>
+    <div class="prize">💨 Запас табака для кальяна на месяц</div><div class="prize">💨 Запас табака для кальяна на год</div>
+    <div class="prize">🏔️ Поездка в горы на выходные</div><div class="prize">⛰️ Путешествие на Кавказ</div>
+    <div class="prize">🌲 Домик в горах на 3 дня</div><div class="prize">🧪 50 литров эпоксидной смолы</div>
+    <div class="prize">💋 Пять поцелуев жены</div><div class="prize">🐈 Право погладить кота вне очереди</div>
+    <div class="prize">🏆 Секретный приз</div>
+  </div>
+
+  <div class="result hidden" id="result">
+    <div>🎉 Поздравляем! Вы выиграли:</div>
+    <div class="result-title">🏆 СЕКРЕТНЫЙ ПРИЗ</div>
+    <button class="btn" id="detailsBtn" type="button">Узнать подробности</button>
+  </div>
+</section>
+
+<section class="card hidden" id="s3">
+  <div class="kicker">Проверка выигрыша</div>
+  <h2>Федеральное агентство праздничных розыгрышей</h2>
+  <div class="check">
+    <div class="check-row"><span>Проверка великолепия</span><span class="ok">пройдена ✅</span></div>
+    <div class="check-row"><span>Картофельная совместимость</span><span class="ok">100% 🥔</span></div>
+    <div class="check-row"><span>Любовь жены</span><span class="ok">обнаружена ❤️</span></div>
+    <div class="check-row"><span>Стратегический запас труханов</span><span class="warn">засекречен 🩲</span></div>
+  </div>
+  <div class="alert">
+    ⚠️ В связи с происхождением из Тамбовской области комиссия первоначально рассматривала присвоение статуса <b>«Картофельная голова»</b>. После дополнительной проверки решение было пересмотрено.
+  </div>
+  <button class="btn" id="decisionBtn" type="button">Узнать решение комиссии</button>
+</section>
+
+<section class="card hidden" id="s4">
+  <div class="certificate">
+    <h1>🏛 Министерство ландшафтного великолепия</h1>
+    <h2>Приказ №16</h2>
+
+    <div class="stamp">ВЕЛИКОЛЕПНО<br>ОДОБРЕНО ✅</div>
+
+    <div class="official">
+      В ходе проверки установлено, что гражданин <b>СЕРГЕЙ ЧУКСИН</b> на протяжении многих лет демонстрирует стабильно высокий уровень великолепия, успешно работает с деревом, создаёт красивые вещи своими руками и подаёт большие надежды в сфере благоустройства окружающей среды.
+      <br><br>
+      В связи с вышеизложенным Министерство постановляет:
+      <br><br>
+      <b>1.</b> Присвоить Сергею Чуксину почётное звание <b>ВЕЛИКОЛЕПНЫЙ+</b>.<br>
+      <b>2.</b> Направить его на повышение квалификации по программе <b>«Ландшафтный дизайн»</b>.<br>
+      <b>3.</b> Оплатить обучение за счёт средств Министерства ландшафтного великолепия.
+    </div>
+
+    <h3>📊 Отчёт Межведомственной комиссии</h3>
+    <div class="stats">
+      <div class="stat">🔥 Коэффициент великолепия — <b>98%</b></div>
+      <div class="stat">🪵 Навык работы с деревом — <b>100%</b></div>
+      <div class="stat">🌿 Потенциал в ландшафтном дизайне — <b>высокий</b></div>
+      <div class="stat">❤️ Любовь жены — <b>бесконечность</b></div>
+      <div class="stat">🥔 Картофельная совместимость — <b>100%</b></div>
+      <div class="stat">🩲 Труханный потенциал — <b>высокий</b></div>
+      <div class="stat">🩲 Индекс труханной независимости — <b>87%</b></div>
+      <div class="stat">🩲 Стратегический запас труханов — <b>засекречен</b></div>
+      <div class="stat">🩲 Вероятность выиграть труханы — <b>52.9%</b></div>
+      <div class="stat">🥔 Вероятность выиграть картошку — <b>47%</b></div>
+      <div class="stat">🎁 Вероятность получить крутой подарок — <b>0.1%</b></div>
+    </div>
+
+    <div class="official">
+      <b>Государственная награда:</b><br>
+      🌿 Курс по ландшафтному дизайну в Нетологии.
+      <br><br>
+      Для получения доступа необходимо:<br>
+      ✅ Поцеловать жену<br>
+      ✅ Крепко обнять жену<br>
+      ✅ Сказать: «Спасибо, любимая, подарок огонь»
+    </div>
+
+    <div class="access">
+      <div><b>Сайт курса:</b> https://netology.ru</div>
+      <div><b>Логин:</b> xane.so809@gmail.com</div>
+      <div><b>Пароль:</b> пароль</div>
+    </div>
+
+    <div style="text-align:center">
+      <a class="btn" href="https://netology.ru" target="_blank">Получить доступ к обучению</a>
+    </div>
+
+    <div class="signature">
+      С уважением,<br><br>
+      <b>Министр ландшафтного великолепия</b><br>
+      Ксения Чуксина<br><br>
+      М.П.<br>
+      <i>(Место для поцелуя)</i>
+    </div>
+
+    <p class="small" style="text-align:center;color:#596454">
+      <i>Сведения о стратегическом запасе труханов засекречены Министерством обороны Великолепия.</i><br>
+      <i>Документ вступает в силу немедленно после объятий с министром.</i>
+    </p>
+  </div>
+</section>
+</main>
+
+<script>
+const s1=document.getElementById("s1"),s2=document.getElementById("s2"),s3=document.getElementById("s3"),s4=document.getElementById("s4");
+const wheel=document.getElementById("wheel"),result=document.getElementById("result");
+document.getElementById("spinBtn").addEventListener("click",()=>{
+  s1.classList.add("hidden");s2.classList.remove("hidden");
+  setTimeout(()=>wheel.classList.add("spin"),160);
+  setTimeout(()=>{result.classList.remove("hidden");result.scrollIntoView({behavior:"smooth",block:"center"});},4850);
+});
+document.getElementById("detailsBtn").addEventListener("click",()=>{
+  s2.classList.add("hidden");s3.classList.remove("hidden");window.scrollTo({top:0,behavior:"smooth"});
+});
+document.getElementById("decisionBtn").addEventListener("click",()=>{
+  s3.classList.add("hidden");s4.classList.remove("hidden");window.scrollTo({top:0,behavior:"smooth"});
+});
+</script>
+</body>
+</html>
